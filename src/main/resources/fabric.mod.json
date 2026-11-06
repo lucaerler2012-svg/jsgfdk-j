@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "crystal-auto",
+	"version": "${version}",
+	"name": "Crystal Auto",
+	"description": "Automatisches Platzieren und Zünden von End-Kristallen auf Obsidian/Bedrock. Zwei Modi: Crystal-Modus (Kristall in Hand) und Obsidian-Modus (Obsidian in Hand).",
+	"authors": [
+		"User"
+	],
+	"contact": {
+		"homepage": "https://github.com/",
+		"sources": "https://github.com/"
+	},
+	"license": "MIT",
+	"icon": "assets/crystal-auto/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"com.example.TemplateMod"
+		],
+		"client": [
+			"com.example.client.TemplateModClient"
+		]
+	},
+	"mixins": [
+		"crystal-auto.mixins.json",
+		{
+			"config": "crystal-auto.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
