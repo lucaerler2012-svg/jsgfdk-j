@@ -1,0 +1,46 @@
+name: Build Mod
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:  # manuell auslösbar
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # für Release/Artifacts hochladen
+
+    steps:
+      - name: Repository klonen
+        uses: actions/checkout@v4
+
+      - name: Java 25 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'gradle'
+
+      - name: Gradle Wrapper validieren
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Mod bauen
+        run: ./gradlew build --no-daemon
+
+      - name: JAR als Artifact hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: crystal-auto-${{ github.run_number }}
+          path: build/libs/*.jar
+          retention-days: 30
+
+      # Optional: Automatisches Release bei Tags (z. B. v1.0.0)
+      - name: Release erstellen
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
+          generate_release_notes: true
